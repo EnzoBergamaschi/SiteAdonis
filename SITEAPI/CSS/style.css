@@ -1,0 +1,41 @@
+/* Estilo Global */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000000; /* Fundo preto */
+    color: #ffffff; /* Texto branco */
+    padding: 30px;
+    text-align: center;
+}
+h1 {
+    color: #f5a623; /* Cor dourada */
+    font-size: 36px;
+}
+
+/* Estilo da logo */
+#logo {
+    margin-bottom: 20px;
+}
+
+/* Estilo dos Botões */
+button {
+    background-color: #c8102e; /* Vermelho Milan */
+    color: white;
+    padding: 15px 30px;
+    font-size: 18px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+button:hover {
+    background-color: #9b0817; /* Tom mais escuro de vermelho */
+}
+
+/* Estilo do Resultado */
+#resultado {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #222222; /* Fundo escuro para destacar o resultado */
+    border-radius: 5px;
+}

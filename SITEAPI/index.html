@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API do Milan</title>
+    <link rel="stylesheet" href="./CSS/style.css">
+</head>
+<body>
+    <!-- Logo do Milan -->
+    <div id="logo">
+        <!-- /////////////////////////////////////////////////////////// -->
+        <!-- AQUI VAI A LOGO DO MILAN, SUBSTITUA O CAMINHO ABAIXO -->
+        <!-- Substitua "sua_logo_do_time.png" pelo caminho da sua logo -->
+        <img src="sua_logo_do_time.png" alt="Logo do Milan" width="200px" height="auto">
+        <!-- /////////////////////////////////////////////////////////// -->
+    </div>
+
+    <h1>API do Milan - Gerenciar Jogadores</h1>
+    
+    <!-- Botões de Ação -->
+    <button onclick="listarJogadores()">Listar Todos os Jogadores</button>
+    <button onclick="buscarJogador()">Buscar Jogador</button>
+    <button onclick="adicionarJogador()">Adicionar Jogador</button>
+    <button onclick="retirarJogador()">Retirar Jogador</button>
+    <button onclick="atualizarJogador()">Atualizar Jogador</button>
+
+    <!-- Resultado da Ação -->
+    <div id="resultado"></div>
+
+    <script>
+      // Função para listar jogadores
+function listarJogadores() {
+    fetch('https://bancodados-production.up.railway.app/rindex')
+        .then(response => response.json())
+        .then(data => {
+            if (!Array.isArray(data)) {
+                throw new Error('Resposta inesperada da API.');
+            }
+            let html = '<h2>Lista de Jogadores:</h2><ul>';
+            data.forEach(jogador => {
+                html += `<li>${jogador.nome} - ${jogador.posicao} - ${jogador.titular ? 'Titular' : 'Reserva'} - ${jogador.altura}m - ${jogador.idade} anos</li>`;
+            });
+            html += '</ul>';
+            document.getElementById('resultado').innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            document.getElementById('resultado').innerHTML = '<p>Erro ao buscar jogadores.</p>';
+        });
+}
+
+// Função para adicionar um jogador
+function adicionarJogador() {
+    let nome = prompt('Digite o nome do jogador:');
+    let posicao = prompt('Digite a posição do jogador:');
+    let titular = confirm('O jogador é titular? (OK para Sim, Cancelar para Não)');
+    let altura = prompt('Digite a altura do jogador (exemplo: 1.80):');
+    let idade = prompt('Digite a idade do jogador:');
+
+    if (!nome || !posicao || !altura || !idade) {
+        alert('Todos os campos são obrigatórios.');
+        return;
+    }
+
+    fetch('https://bancodados-production.up.railway.app/rstore', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            nome, 
+            posicao, 
+            titular, 
+            altura: parseFloat(altura), 
+            idade: parseInt(idade)
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data && data.nome) {
+            document.getElementById('resultado').innerHTML = `<p>Jogador ${data.nome} adicionado com sucesso!</p>`;
+        } else {
+            document.getElementById('resultado').innerHTML = `<p>Erro ao adicionar jogador. Verifique a API.</p>`;
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        document.getElementById('resultado').innerHTML = `<p>Erro ao conectar com a API.</p>`;
+    });
+}
+
+// Função para buscar um jogador por ID
+function buscarJogador() {
+    let id = prompt('Digite o ID do jogador que deseja buscar:');
+    if (!id) {
+        alert('ID é obrigatório.');
+        return;
+    }
+
+    fetch(`https://bancodados-production.up.railway.app/jogadores/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.nome) {
+                document.getElementById('resultado').innerHTML = `<h2>Jogador Encontrado:</h2><p>${data.nome} - ${data.posicao} - ${data.titular ? 'Titular' : 'Reserva'} - ${data.altura}m - ${data.idade} anos</p>`;
+            } else {
+                document.getElementById('resultado').innerHTML = '<p>Jogador não encontrado.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            document.getElementById('resultado').innerHTML = '<p>Erro ao buscar jogador.</p>';
+        });
+}
+
+// Função para retirar um jogador
+function retirarJogador() {
+    let id = prompt('Digite o ID do jogador que deseja retirar:');
+    if (!id) {
+        alert('ID é obrigatório.');
+        return;
+    }
+
+    fetch(`https://bancodados-production.up.railway.app/jogadores/${id}`, {
+        method: 'DELETE'
+    })
+    .then(response => {
+        if (response.ok) {
+            document.getElementById('resultado').innerHTML = `<p>Jogador com ID ${id} retirado com sucesso!</p>`;
+        } else {
+            document.getElementById('resultado').innerHTML = '<p>Erro ao retirar jogador.</p>';
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        document.getElementById('resultado').innerHTML = '<p>Erro ao conectar com a API.</p>';
+    });
+}
+
+// Função para atualizar um jogador
+function atualizarJogador() {
+    let id = prompt('Digite o ID do jogador que deseja atualizar:');
+    if (!id) {
+        alert('ID é obrigatório.');
+        return;
+    }
+
+    let nome = prompt('Digite o novo nome do jogador:');
+    let posicao = prompt('Digite a nova posição do jogador:');
+    let titular = confirm('O jogador é titular? (OK para Sim, Cancelar para Não)');
+    let altura = prompt('Digite a nova altura do jogador (exemplo: 1.80):');
+    let idade = prompt('Digite a nova idade do jogador:');
+
+    if (!nome || !posicao || !altura || !idade) {
+        alert('Todos os campos são obrigatórios.');
+        return;
+    }
+
+    fetch(`https://bancodados-production.up.railway.app/jogadores/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            nome, 
+            posicao, 
+            titular, 
+            altura: parseFloat(altura), 
+            idade: parseInt(idade)
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data && data.nome) {
+            document.getElementById('resultado').innerHTML = `<p>Jogador atualizado: ${data.nome} - ${data.posicao} - ${data.titular ? 'Titular' : 'Reserva'} - ${data.altura}m - ${data.idade} anos</p>`;
+        } else {
+            document.getElementById('resultado').innerHTML = '<p>Erro ao atualizar jogador.</p>';
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        document.getElementById('resultado').innerHTML = '<p>Erro ao conectar com a API.</p>';
+    });
+}
+
+    </script>
+    
+</body>
+</html>
