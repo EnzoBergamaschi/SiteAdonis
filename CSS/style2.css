@@ -1,0 +1,56 @@
+#listaJogadores {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 80%; /* Ajusta a largura para ocupar melhor a tela */
+    max-width: 600px; /* Define um limite para não ficar muito largo */
+    margin: auto; /* Centraliza a lista na tela */
+    text-align: left; /* Alinha o texto à esquerda */
+}
+
+/* Estiliza cada jogador dentro da lista */
+#listaJogadores div {
+    background-color: #f8f8f8;
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Estiliza os parágrafos dentro de cada jogador */
+#listaJogadores p {
+    font-size: 16px;
+    margin: 5px 0;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+/* Linha horizontal */
+hr {
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+/* Estiliza o botão de voltar */
+button {
+    background-color: #e50914;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button:hover {
+    background-color: #9c1c1c;
+}
